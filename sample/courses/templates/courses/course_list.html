@@ -1,0 +1,97 @@
+{% extends 'courses/base.html' %}
+{% load static %}
+
+{% block title %}Available Courses{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>Available Courses</h1>
+    </div>
+    <div class="col-md-4">
+        <form method="get" class="d-flex">
+            <input type="text" name="q" class="form-control me-2" placeholder="Search courses..." value="{{ query }}">
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </form>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Filters</h5>
+            </div>
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    {% if query %}
+                        <input type="hidden" name="q" value="{{ query }}">
+                    {% endif %}
+                    
+                    <div class="col-md-4">
+                        <label for="level" class="form-label">Course Level</label>
+                        <select name="level" id="level" class="form-select">
+                            <option value="">All Levels</option>
+                            {% for level_code, level_name in level_choices %}
+                                <option value="{{ level_code }}" {% if level == level_code %}selected{% endif %}>{{ level_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary">Apply Filters</button>
+                        {% if query or level %}
+                            <a href="{% url 'courses:course_list' %}" class="btn btn-outline-secondary ms-2">Clear Filters</a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if courses %}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for course in courses %}
+            <div class="col">
+                <div class="card h-100 course-card">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <span class="badge bg-{% if course.level == 'BEG' %}success{% elif course.level == 'INT' %}primary{% else %}warning{% endif %} text-white">
+                            {{ course.get_level_display }}
+                        </span>
+                        <span class="badge bg-secondary">{{ course.code }}</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course.title }}</h5>
+                        <p class="card-text text-muted small">
+                            <strong>Credits:</strong> {{ course.credits }} | 
+                            <strong>Enrollment:</strong> {{ course.enrolled_students }}/{{ course.max_students }}
+                        </p>
+                        <p class="card-text">{{ course.description|truncatewords:25 }}</p>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="instructor-info">
+                            {% if course.instructor.profile_picture %}
+                                <img src="{{ course.instructor.profile_picture.url }}" alt="{{ course.instructor }}">
+                            {% else %}
+                                <img src="https://via.placeholder.com/50" alt="Default profile">
+                            {% endif %}
+                            <div>
+                                <small class="text-muted">Instructor:</small><br>
+                                <a href="{% url 'courses:instructor_detail' course.instructor.id %}" class="text-decoration-none">
+                                    {{ course.instructor }}
+                                </a>
+                            </div>
+                        </div>
+                        <a href="{% url 'courses:course_detail' course.code %}" class="btn btn-primary w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <p class="mb-0">No courses found matching your criteria. Try adjusting your search or filters.</p>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'sqlite_tutorial/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="p-5 mb-4 bg-light rounded-3">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">SQLite Tutorial</h1>
+        <p class="col-md-8 fs-4">Learn SQLite and SQL basics with Python's sqlite3 module. This tutorial covers CRUD operations, parameterized queries, context managers, query optimization, and includes a hands-on student database project.</p>
+    </div>
+</div>
+
+<div class="row align-items-md-stretch">
+    {% for section in sections %}
+    <div class="col-md-6 mb-4">
+        <div class="h-100 p-5 bg-light border rounded-3">
+            <h2>{{ section.name }}</h2>
+            <p>{{ section.description }}</p>
+            <a href="{{ section.url }}" class="btn btn-outline-primary">Go to Tutorial</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-12">
+        <h2>About This Tutorial</h2>
+        <p>This tutorial is designed to provide a comprehensive introduction to SQLite and SQL basics using Python. It covers:</p>
+        <ul>
+            <li><strong>SQLite Introduction and SQL Basics (CRUD)</strong> - Learn how to create, read, update, and delete data in SQLite databases.</li>
+            <li><strong>Querying with Python's sqlite3 Module</strong> - Understand how to use Python's built-in module to interact with SQLite databases.</li>
+            <li><strong>Parameterized Queries and Context Managers</strong> - Learn secure query practices and efficient resource management.</li>
+            <li><strong>Optimization Basics using EXPLAIN</strong> - Understand how to analyze and optimize database queries.</li>
+            <li><strong>Hands-on Project</strong> - Build a student database and generate reports from CSV data.</li>
+        </ul>
+        <p>Each section includes detailed explanations, code examples, and the ability to run the code directly to see the results.</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'courses/base.html' %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Student Dashboard</h4>
+                <a href="{% url 'profile' %}" class="btn btn-light btn-sm">Edit Profile</a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 text-center">
+                        {% if user.student.profile_picture %}
+                            <img src="{{ user.student.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="max-width: 150px; max-height: 150px;">
+                        {% else %}
+                            <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px; margin: 0 auto;">
+                                <h1>{{ user.first_name|first|upper }}{{ user.last_name|first|upper }}</h1>
+                            </div>
+                        {% endif %}
+                        <h5>{{ user.first_name }} {{ user.last_name }}</h5>
+                        <p class="text-muted">{{ user.student.student_id }}</p>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Personal Information</h5>
+                                <table class="table">
+                                    <tr>
+                                        <th>Email:</th>
+                                        <td>{{ user.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Major:</th>
+                                        <td>{{ user.student.major|default:"Not specified" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date of Birth:</th>
+                                        <td>{{ user.student.date_of_birth|default:"Not specified" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Gender:</th>
+                                        <td>{{ user.student.get_gender_display|default:"Not specified" }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Contact Information</h5>
+                                <table class="table">
+                                    <tr>
+                                        <th>Address:</th>
+                                        <td>{{ user.student.address|default:"Not specified" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Phone:</th>
+                                        <td>{{ user.student.phone_number|default:"Not specified" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Joined:</th>
+                                        <td>{{ user.student.date_joined }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Last Activity:</th>
+                                        <td>{{ user.student.last_activity }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">My Courses</h4>
+            </div>
+            <div class="card-body">
+                {% if enrollments %}
+                    <div class="row">
+                        {% for enrollment in enrollments %}
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100 course-card">
+                                    <div class="card-header bg-light">
+                                        <h5 class="card-title mb-0">{{ enrollment.course.title }}</h5>
+                                        <small class="text-muted">{{ enrollment.course.code }}</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">{{ enrollment.course.description|truncatewords:20 }}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-primary">{{ enrollment.course.get_level_display }}</span>
+                                            <span class="badge {% if enrollment.status == 'ENR' %}bg-success{% elif enrollment.status == 'DRP' %}bg-danger{% else %}bg-info{% endif %}">
+                                                {{ enrollment.get_status_display }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">Enrolled: {{ enrollment.enrollment_date }}</small>
+                                        <a href="{% url 'courses:course_detail' enrollment.course.id %}" class="btn btn-sm btn-outline-primary">View Course</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <p>You are not enrolled in any courses yet.</p>
+                        <a href="{% url 'courses:course_list' %}" class="btn btn-primary">Browse Courses</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

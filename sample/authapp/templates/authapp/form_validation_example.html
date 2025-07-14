@@ -1,0 +1,186 @@
+{% extends 'courses/base.html' %}
+
+{% block title %}Form Validation Example{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Form Validation Example</h4>
+            </div>
+            <div class="card-body">
+                <p class="lead">This example demonstrates various form validation techniques in Django:</p>
+                <ul class="mb-4">
+                    <li>Built-in field validators</li>
+                    <li>Custom field validators</li>
+                    <li>Form-level validation with clean() method</li>
+                    <li>Field-specific validation with clean_fieldname() methods</li>
+                    <li>Client-side validation with HTML5 attributes</li>
+                    <li>Custom error messages</li>
+                </ul>
+                
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label">Username</label>
+                        <input type="text" name="username" id="id_username" class="form-control {% if form.username.errors %}is-invalid{% endif %}" 
+                               value="{{ form.username.value|default:'' }}" required pattern="[A-Za-z0-9_]+" minlength="3" maxlength="20">
+                        {% if form.username.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.username.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">3-20 characters, only letters, numbers, and underscores.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label">Email</label>
+                        <input type="email" name="email" id="id_email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" 
+                               value="{{ form.email.value|default:'' }}" required>
+                        {% if form.email.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_password" class="form-label">Password</label>
+                        <input type="password" name="password" id="id_password" class="form-control {% if form.password.errors %}is-invalid{% endif %}" 
+                               required minlength="8">
+                        {% if form.password.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">At least 8 characters with a mix of letters, numbers, and special characters.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_confirm_password" class="form-label">Confirm Password</label>
+                        <input type="password" name="confirm_password" id="id_confirm_password" class="form-control {% if form.confirm_password.errors %}is-invalid{% endif %}" 
+                               required>
+                        {% if form.confirm_password.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.confirm_password.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_birth_year" class="form-label">Birth Year</label>
+                        <input type="number" name="birth_year" id="id_birth_year" class="form-control {% if form.birth_year.errors %}is-invalid{% endif %}" 
+                               value="{{ form.birth_year.value|default:'' }}" min="1900" max="{% now 'Y' %}">
+                        {% if form.birth_year.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.birth_year.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_website" class="form-label">Website (Optional)</label>
+                        <input type="url" name="website" id="id_website" class="form-control {% if form.website.errors %}is-invalid{% endif %}" 
+                               value="{{ form.website.value|default:'' }}">
+                        {% if form.website.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.website.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">Must be a valid URL starting with http:// or https://</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" name="terms" id="id_terms" class="form-check-input {% if form.terms.errors %}is-invalid{% endif %}" 
+                                   {% if form.terms.value %}checked{% endif %} required>
+                            <label for="id_terms" class="form-check-label">I agree to the terms and conditions</label>
+                            {% if form.terms.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.terms.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Example of client-side validation enhancement
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const password = document.getElementById('id_password');
+        const confirmPassword = document.getElementById('id_confirm_password');
+        
+        // Custom password match validation
+        confirmPassword.addEventListener('input', function() {
+            if (password.value !== confirmPassword.value) {
+                confirmPassword.setCustomValidity('Passwords do not match');
+            } else {
+                confirmPassword.setCustomValidity('');
+            }
+        });
+        
+        // Password strength indicator
+        password.addEventListener('input', function() {
+            const value = password.value;
+            let strength = 0;
+            
+            if (value.length >= 8) strength += 1;
+            if (/[A-Z]/.test(value)) strength += 1;
+            if (/[a-z]/.test(value)) strength += 1;
+            if (/[0-9]/.test(value)) strength += 1;
+            if (/[^A-Za-z0-9]/.test(value)) strength += 1;
+            
+            const strengthText = ['Very Weak', 'Weak', 'Medium', 'Strong', 'Very Strong'];
+            const strengthClass = ['text-danger', 'text-danger', 'text-warning', 'text-success', 'text-success'];
+            
+            const strengthIndicator = document.createElement('div');
+            strengthIndicator.className = strengthClass[strength - 1] + ' mt-1';
+            strengthIndicator.textContent = 'Password Strength: ' + strengthText[strength - 1];
+            
+            const existingIndicator = password.parentNode.querySelector('.mt-1');
+            if (existingIndicator) {
+                password.parentNode.removeChild(existingIndicator);
+            }
+            
+            if (value.length > 0) {
+                password.parentNode.appendChild(strengthIndicator);
+            }
+        });
+    });
+</script>
+{% endblock %}

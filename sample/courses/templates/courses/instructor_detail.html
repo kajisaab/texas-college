@@ -1,0 +1,76 @@
+{% extends 'courses/base.html' %}
+{% load static %}
+
+{% block title %}{{ instructor }} | Instructor Profile{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                {% if instructor.profile_picture %}
+                    <img src="{{ instructor.profile_picture.url }}" alt="{{ instructor }}" 
+                         class="rounded-circle img-fluid mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                {% else %}
+                    <img src="https://via.placeholder.com/150" alt="Default profile" 
+                         class="rounded-circle img-fluid mb-3">
+                {% endif %}
+                
+                <h3>{{ instructor }}</h3>
+                <p class="text-muted">{{ instructor.expertise }}</p>
+                
+                <hr>
+                
+                <div class="text-start">
+                    <p><strong>Office Hours:</strong> {{ instructor.office_hours|default:"Not specified" }}</p>
+                    <p><strong>Joined:</strong> {{ instructor.date_joined }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="mb-0">About</h4>
+            </div>
+            <div class="card-body">
+                <p>{{ instructor.bio|linebreaks|default:"No biography provided." }}</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Courses Taught</h4>
+            </div>
+            <div class="card-body">
+                {% if courses %}
+                    <div class="row row-cols-1 row-cols-md-2 g-4">
+                        {% for course in courses %}
+                            <div class="col">
+                                <div class="card h-100 course-card">
+                                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                        <span class="badge bg-{% if course.level == 'BEG' %}success{% elif course.level == 'INT' %}primary{% else %}warning{% endif %} text-white">
+                                            {{ course.get_level_display }}
+                                        </span>
+                                        <span class="badge bg-secondary">{{ course.code }}</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ course.title }}</h5>
+                                        <p class="card-text">{{ course.description|truncatewords:15 }}</p>
+                                    </div>
+                                    <div class="card-footer bg-white border-top-0">
+                                        <a href="{% url 'courses:course_detail' course.code %}" class="btn btn-primary w-100">View Course</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">This instructor is not currently teaching any active courses.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

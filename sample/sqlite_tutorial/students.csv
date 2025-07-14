@@ -1,0 +1,16 @@
+id,first_name,last_name,email,major,gpa,enrollment_date
+1,John,Doe,john.doe@example.com,Computer Science,3.8,2022-09-01
+2,Jane,Smith,jane.smith@example.com,Biology,3.9,2022-08-15
+3,Michael,Johnson,michael.j@example.com,Mathematics,3.7,2022-09-05
+4,Emily,Williams,emily.w@example.com,Physics,3.6,2022-08-20
+5,David,Brown,david.b@example.com,Chemistry,3.5,2022-09-10
+6,Sarah,Miller,sarah.m@example.com,English,3.4,2022-08-25
+7,James,Wilson,james.w@example.com,History,3.3,2022-09-15
+8,Jessica,Taylor,jessica.t@example.com,Psychology,3.2,2022-08-30
+9,Robert,Anderson,robert.a@example.com,Sociology,3.1,2022-09-20
+10,Jennifer,Thomas,jennifer.t@example.com,Economics,3.0,2022-09-01
+11,William,Jackson,william.j@example.com,Political Science,3.9,2022-08-15
+12,Amanda,White,amanda.w@example.com,Art,3.8,2022-09-05
+13,Christopher,Harris,christopher.h@example.com,Music,3.7,2022-08-20
+14,Elizabeth,Martin,elizabeth.m@example.com,Philosophy,3.6,2022-09-10
+15,Daniel,Thompson,daniel.t@example.com,Anthropology,3.5,2022-08-25

@@ -1,0 +1,127 @@
+{% extends 'courses/base.html' %}
+{% load static %}
+
+{% block title %}{{ course.title }} | Course Details{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'courses:course_list' %}">Courses</a></li>
+                <li class="breadcrumb-item active">{{ course.code }}</li>
+            </ol>
+        </nav>
+        
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">{{ course.title }}</h2>
+                <span class="badge bg-{% if course.level == 'BEG' %}success{% elif course.level == 'INT' %}primary{% else %}warning{% endif %} text-white">
+                    {{ course.get_level_display }}
+                </span>
+            </div>
+            <div class="card-body">
+                <h6 class="card-subtitle mb-3 text-muted">{{ course.code }} • {{ course.credits }} Credits</h6>
+                
+                <div class="instructor-info">
+                    {% if course.instructor.profile_picture %}
+                        <img src="{{ course.instructor.profile_picture.url }}" alt="{{ course.instructor }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/50" alt="Default profile">
+                    {% endif %}
+                    <div>
+                        <small class="text-muted">Instructor:</small><br>
+                        <a href="{% url 'courses:instructor_detail' course.instructor.id %}" class="text-decoration-none">
+                            {{ course.instructor }}
+                        </a>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h5>Course Description</h5>
+                <p>{{ course.description }}</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h5>Course Details</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Start Date
+                                <span>{{ course.start_date }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                End Date
+                                <span>{{ course.end_date }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Enrollment
+                                <span class="badge bg-primary rounded-pill">{{ course.enrollments.count }}/{{ course.max_students }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h5>Prerequisites</h5>
+                        {% if prerequisites %}
+                            <ul class="list-group list-group-flush">
+                                {% for prereq in prerequisites %}
+                                    <li class="list-group-item">
+                                        <a href="{% url 'courses:course_detail' prereq.code %}" class="text-decoration-none">
+                                            {{ prereq.code }}: {{ prereq.title }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted">No prerequisites required</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-white">
+                {% if user.is_authenticated %}
+                    {% if is_enrolled %}
+                        <div class="alert alert-success mb-0">
+                            <i class="bi bi-check-circle-fill"></i> You are enrolled in this course
+                        </div>
+                    {% else %}
+                        <a href="{% url 'courses:enroll_course' course.code %}" class="btn btn-success">
+                            Enroll in this Course
+                        </a>
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-info mb-0">
+                        <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Log in</a> to enroll in this course
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Related Courses</h5>
+            </div>
+            <div class="card-body">
+                {% if related_courses %}
+                    <div class="list-group list-group-flush">
+                        {% for related in related_courses %}
+                            <a href="{% url 'courses:course_detail' related.code %}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">{{ related.title }}</h6>
+                                    <small class="text-muted">{{ related.code }}</small>
+                                </div>
+                                <small class="text-muted">{{ related.get_level_display }} • {{ related.credits }} Credits</small>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">No related courses found</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

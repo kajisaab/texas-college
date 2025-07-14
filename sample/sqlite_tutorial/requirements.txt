@@ -1,0 +1,7 @@
+# Core dependencies
+pandas>=1.3.0
+matplotlib>=3.4.0
+
+# Optional dependencies for additional features
+ipython>=7.0.0  # For interactive exploration
+jupyter>=1.0.0  # For running notebooks if needed

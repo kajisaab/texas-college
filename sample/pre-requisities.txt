@@ -1,0 +1,44 @@
+🧠 1. PEP 8 – Python Enhancement Proposal 8
+
+🔹 What it is:
+The official style guide for writing Python code — basically, the “grammar rules” for Python.
+
+🔹 What it defines:
+Rules for how your code should look:
+	•	Indentation: 4 spaces per level
+	•	Line length: max 79 characters
+	•	Naming conventions (e.g. snake_case for functions/variables)
+	•	Blank lines between functions/classes
+	•	Spaces around operators
+	•	Import order and formatting
+
+🔹 Why it matters:
+It makes your code more readable, standardized, and easier to collaborate on.
+
+# Not PEP 8 compliant
+def  add(a,b):return a+b
+
+# PEP 8 compliant
+def add(a, b):
+    return a + b
+
+
+2. isort – Import Sorter
+
+🔹 What it does:
+Automatically sorts your imports to follow PEP 8 guidelines.
+
+🔹 Why it’s useful:
+Keeps import statements clean, alphabetical, grouped, and avoids duplicates.
+
+
+3. black – The Uncompromising Code Formatter
+
+🔹 What it does:
+Automatically reformats your entire code file to follow a consistent, opinionated style.
+
+🔹 Why it’s popular:
+	•	One standard way to format code — no arguments.
+	•	Fast and works with most editors (like VS Code).
+	•	Follows PEP 8 with some stricter rules (e.g. 88 char line limit instead of 79).
+
