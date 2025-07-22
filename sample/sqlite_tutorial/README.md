@@ -38,6 +38,7 @@ python sqlite_basics.py
 ```
 
 This script demonstrates:
+
 - Creating a database and tables
 - Inserting data from a CSV file
 - Querying data with various conditions
@@ -52,6 +53,7 @@ python parameterized_queries.py
 ```
 
 This script demonstrates:
+
 - SQL injection vulnerabilities and how to prevent them
 - Using parameterized queries for security
 - Using context managers for resource cleanup
@@ -66,6 +68,7 @@ python query_optimization.py
 ```
 
 This script demonstrates:
+
 - Using EXPLAIN to understand query execution plans
 - Creating indexes to improve query performance
 - Measuring performance improvements
@@ -80,6 +83,7 @@ python student_database_project.py
 ```
 
 This project demonstrates:
+
 - Building a multi-table database (students, courses, enrollments)
 - Importing data from CSV
 - Generating various reports with complex SQL queries
@@ -89,22 +93,26 @@ This project demonstrates:
 ## Key Concepts Covered
 
 1. **SQLite Basics**:
+
    - Database and table creation
    - CRUD operations (Create, Read, Update, Delete)
    - SQL syntax and common commands
 
 2. **Python Integration**:
+
    - Using the `sqlite3` module
    - Cursor and connection objects
    - Fetching and processing results
 
 3. **Best Practices**:
+
    - Parameterized queries for security
    - Context managers for resource management
    - Transaction handling
    - Error handling
 
 4. **Performance Optimization**:
+
    - Using EXPLAIN to analyze queries
    - Creating and using indexes
    - Measuring query performance
@@ -122,3 +130,9 @@ This project demonstrates:
 - [Python sqlite3 Module Documentation](https://docs.python.org/3/library/sqlite3.html)
 - [SQL Tutorial on W3Schools](https://www.w3schools.com/sql/)
 - [SQLite Tutorial on SQLiteTutorial.net](https://www.sqlitetutorial.net/)
+
+pip install django
+
+pip install djangorestframework.
+
+pip install Pillow.

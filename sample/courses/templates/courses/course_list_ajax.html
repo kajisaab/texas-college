@@ -1,56 +1,69 @@
-{% extends 'courses/base.html' %}
-{% load static %}
-
-{% block title %}Courses - AJAX Demo{% endblock %}
-
-{% block content %}
+{% extends 'courses/base.html' %} {% load static %} {% block title %}Courses -
+AJAX Demo{% endblock %} {% block content %}
 <div class="row mb-4">
-    <div class="col-md-8">
-        <h1>Courses - AJAX Demo</h1>
-        <p class="text-muted">This page demonstrates loading course data dynamically using the Fetch API</p>
+  <div class="col-md-8">
+    <h1>Courses - AJAX Demo</h1>
+    <p class="text-muted">
+      This page demonstrates loading course data dynamically using the Fetch API
+    </p>
+  </div>
+  <div class="col-md-4">
+    <div class="input-group mb-3">
+      <input
+        type="text"
+        id="search-input"
+        class="form-control"
+        placeholder="Search courses..."
+      />
+      <button class="btn btn-outline-primary" type="button" id="search-button">
+        Search
+      </button>
     </div>
-    <div class="col-md-4">
-        <div class="input-group mb-3">
-            <input type="text" id="search-input" class="form-control" placeholder="Search courses...">
-            <button class="btn btn-outline-primary" type="button" id="search-button">Search</button>
-        </div>
-    </div>
+  </div>
 </div>
 
 <div class="row mb-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header bg-light">
-                <h5 class="mb-0">Filters</h5>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <label for="level-filter" class="form-label">Course Level</label>
-                        <select id="level-filter" class="form-select">
-                            <option value="">All Levels</option>
-                            <option value="BEG">Beginner</option>
-                            <option value="INT">Intermediate</option>
-                            <option value="ADV">Advanced</option>
-                        </select>
-                    </div>
-                    
-                    <div class="col-md-4 d-flex align-items-end">
-                        <button type="button" id="filter-button" class="btn btn-primary">Apply Filters</button>
-                        <button type="button" id="clear-filters" class="btn btn-outline-secondary ms-2">Clear Filters</button>
-                    </div>
-                </div>
-            </div>
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Filters</h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="level-filter" class="form-label">Course Level</label>
+            <select id="level-filter" class="form-select">
+              <option value="">All Levels</option>
+              <option value="BEG">Beginner</option>
+              <option value="INT">Intermediate</option>
+              <option value="ADV">Advanced</option>
+            </select>
+          </div>
+
+          <div class="col-md-4 d-flex align-items-end">
+            <button type="button" id="filter-button" class="btn btn-primary">
+              Apply Filters
+            </button>
+            <button
+              type="button"
+              id="clear-filters"
+              class="btn btn-outline-secondary ms-2"
+            >
+              Clear Filters
+            </button>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Loading indicator -->
 <div id="loading" class="text-center my-5 d-none">
-    <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-    </div>
-    <p class="mt-2">Loading courses...</p>
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  <p class="mt-2">Loading courses...</p>
 </div>
 
 <!-- Courses container -->
@@ -58,172 +71,189 @@
 
 <!-- No results message -->
 <div id="no-results" class="alert alert-info d-none">
-    <p class="mb-0">No courses found matching your criteria. Try adjusting your search or filters.</p>
+  <p class="mb-0">
+    No courses found matching your criteria. Try adjusting your search or
+    filters.
+  </p>
 </div>
 
 <!-- Course card template -->
 <template id="course-card-template">
-    <div class="col">
-        <div class="card h-100 course-card">
-            <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                <span class="badge level-badge"></span>
-                <span class="badge bg-secondary course-code"></span>
-            </div>
-            <div class="card-body">
-                <h5 class="card-title course-title"></h5>
-                <p class="card-text text-muted small course-meta"></p>
-                <p class="card-text course-description"></p>
-            </div>
-            <div class="card-footer bg-white border-top-0">
-                <div class="instructor-info">
-                    <img src="https://via.placeholder.com/50" alt="Instructor" class="instructor-img">
-                    <div>
-                        <small class="text-muted">Instructor:</small><br>
-                        <a href="#" class="text-decoration-none instructor-name"></a>
-                    </div>
-                </div>
-                <a href="#" class="btn btn-primary w-100 course-link">View Details</a>
-            </div>
+  <div class="col">
+    <div class="card h-100 course-card">
+      <div
+        class="card-header bg-light d-flex justify-content-between align-items-center"
+      >
+        <span class="badge level-badge"></span>
+        <span class="badge bg-secondary course-code"></span>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title course-title"></h5>
+        <p class="card-text text-muted small course-meta"></p>
+        <p class="card-text course-description"></p>
+      </div>
+      <div class="card-footer bg-white border-top-0">
+        <div class="instructor-info">
+          <img
+            src="https://via.placeholder.com/50"
+            alt="Instructor"
+            class="instructor-img"
+          />
+          <div>
+            <small class="text-muted">Instructor:</small><br />
+            <a href="#" class="text-decoration-none instructor-name"></a>
+          </div>
         </div>
+        <a href="#" class="btn btn-primary w-100 course-link">View Details</a>
+      </div>
     </div>
+  </div>
 </template>
 
-{% endblock %}
-
-{% block extra_js %}
+{% endblock %} {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Elements
-        const coursesContainer = document.getElementById('courses-container');
-        const loadingIndicator = document.getElementById('loading');
-        const noResultsMessage = document.getElementById('no-results');
-        const searchInput = document.getElementById('search-input');
-        const searchButton = document.getElementById('search-button');
-        const levelFilter = document.getElementById('level-filter');
-        const filterButton = document.getElementById('filter-button');
-        const clearFiltersButton = document.getElementById('clear-filters');
-        const courseTemplate = document.getElementById('course-card-template');
-        
-        // Initial load
-        loadCourses();
-        
-        // Event listeners
-        searchButton.addEventListener('click', function() {
-            loadCourses();
-        });
-        
-        searchInput.addEventListener('keyup', function(event) {
-            if (event.key === 'Enter') {
-                loadCourses();
-            }
-        });
-        
-        filterButton.addEventListener('click', function() {
-            loadCourses();
-        });
-        
-        clearFiltersButton.addEventListener('click', function() {
-            searchInput.value = '';
-            levelFilter.value = '';
-            loadCourses();
-        });
-        
-        // Function to load courses via API
-        function loadCourses() {
-            // Show loading indicator
-            loadingIndicator.classList.remove('d-none');
-            coursesContainer.innerHTML = '';
-            noResultsMessage.classList.add('d-none');
-            
-            // Build query parameters
-            const params = new URLSearchParams();
-            const searchQuery = searchInput.value.trim();
-            const levelValue = levelFilter.value;
-            
-            if (searchQuery) {
-                params.append('q', searchQuery);
-            }
-            
-            if (levelValue) {
-                params.append('level', levelValue);
-            }
-            
-            // Fetch courses from API
-            fetch(`/courses/api/courses/?${params.toString()}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Hide loading indicator
-                    loadingIndicator.classList.add('d-none');
-                    
-                    // Check if we have results
-                    if (data.results && data.results.length > 0) {
-                        // Render each course
-                        data.results.forEach(course => {
-                            renderCourseCard(course);
-                        });
-                    } else {
-                        // Show no results message
-                        noResultsMessage.classList.remove('d-none');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching courses:', error);
-                    loadingIndicator.classList.add('d-none');
-                    noResultsMessage.classList.remove('d-none');
-                    noResultsMessage.textContent = 'Error loading courses. Please try again later.';
-                });
-        }
-        
-        // Function to render a course card
-        function renderCourseCard(course) {
-            // Clone the template
-            const courseCard = document.importNode(courseTemplate.content, true);
-            
-            // Set level badge
-            const levelBadge = courseCard.querySelector('.level-badge');
-            levelBadge.textContent = course.level_display;
-            
-            // Set badge color based on level
-            if (course.level === 'BEG') {
-                levelBadge.classList.add('bg-success');
-            } else if (course.level === 'INT') {
-                levelBadge.classList.add('bg-primary');
-            } else {
-                levelBadge.classList.add('bg-warning');
-            }
-            
-            // Set course code
-            courseCard.querySelector('.course-code').textContent = course.code;
-            
-            // Set course title
-            courseCard.querySelector('.course-title').textContent = course.title;
-            
-            // Set course meta information
-            courseCard.querySelector('.course-meta').textContent = 
-                `Credits: ${course.credits} | Enrollment: ${course.enrolled_students}/${course.max_students}`;
-            
-            // Set course description (truncate if needed)
-            const description = course.description.length > 100 ? 
-                course.description.substring(0, 100) + '...' : course.description;
-            courseCard.querySelector('.course-description').textContent = description;
-            
-            // Set instructor information
-            if (course.instructor) {
-                courseCard.querySelector('.instructor-name').textContent = course.instructor.name;
-                courseCard.querySelector('.instructor-name').href = `/courses/instructor/${course.instructor.id}/`;
-            }
-            
-            // Set course link
-            courseCard.querySelector('.course-link').href = `/courses/${course.code}/`;
-            
-            // Append to container
-            coursesContainer.appendChild(courseCard);
-        }
+  document.addEventListener("DOMContentLoaded", function () {
+    // Elements
+    const coursesContainer = document.getElementById("courses-container");
+    const loadingIndicator = document.getElementById("loading");
+    const noResultsMessage = document.getElementById("no-results");
+    const searchInput = document.getElementById("search-input");
+    const searchButton = document.getElementById("search-button");
+    const levelFilter = document.getElementById("level-filter");
+    const filterButton = document.getElementById("filter-button");
+    const clearFiltersButton = document.getElementById("clear-filters");
+    const courseTemplate = document.getElementById("course-card-template");
+
+    // Initial load
+    loadCourses();
+
+    // Event listeners
+    searchButton.addEventListener("click", function () {
+      loadCourses();
     });
+
+    searchInput.addEventListener("keyup", function (event) {
+      if (event.key === "Enter") {
+        loadCourses();
+      }
+    });
+
+    filterButton.addEventListener("click", function () {
+      loadCourses();
+    });
+
+    clearFiltersButton.addEventListener("click", function () {
+      searchInput.value = "";
+      levelFilter.value = "";
+      loadCourses();
+    });
+
+    // Function to load courses via API
+    function loadCourses() {
+      // Show loading indicator
+      loadingIndicator.classList.remove("d-none");
+      coursesContainer.innerHTML = "";
+      noResultsMessage.classList.add("d-none");
+
+      // Build query parameters
+      const params = new URLSearchParams();
+      const searchQuery = searchInput.value.trim();
+      const levelValue = levelFilter.value;
+
+      if (searchQuery) {
+        params.append("q", searchQuery);
+      }
+
+      if (levelValue) {
+        params.append("level", levelValue);
+      }
+
+      // Fetch courses from API
+      fetch(`/courses/api/courses/?${params.toString()}`)
+        .then(async (response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return await response.json();
+        })
+        .then((data) => {
+          console.log({ data });
+          // Hide loading indicator
+          loadingIndicator.classList.add("d-none");
+
+          // Check if we have results
+          if (data && data.length > 0) {
+            // Render each course
+            data.forEach((course) => {
+              renderCourseCard(course);
+            });
+          } else {
+            // Show no results message
+            noResultsMessage.classList.remove("d-none");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching courses:", error);
+          loadingIndicator.classList.add("d-none");
+          noResultsMessage.classList.remove("d-none");
+          noResultsMessage.textContent =
+            "Error loading courses. Please try again later.";
+        });
+    }
+
+    // Function to render a course card
+    function renderCourseCard(course) {
+      // Clone the template
+      const courseCard = document.importNode(courseTemplate.content, true);
+
+      // Set level badge
+      const levelBadge = courseCard.querySelector(".level-badge");
+      levelBadge.textContent = course.level_display;
+
+      // Set badge color based on level
+      if (course.level === "BEG") {
+        levelBadge.classList.add("bg-success");
+      } else if (course.level === "INT") {
+        levelBadge.classList.add("bg-primary");
+      } else {
+        levelBadge.classList.add("bg-warning");
+      }
+
+      // Set course code
+      courseCard.querySelector(".course-code").textContent = course.code;
+
+      // Set course title
+      courseCard.querySelector(".course-title").textContent = course.title;
+
+      // Set course meta information
+      courseCard.querySelector(
+        ".course-meta"
+      ).textContent = `Credits: ${course.credits} | Enrollment: ${course.enrolled_students}/${course.max_students}`;
+
+      // Set course description (truncate if needed)
+      const description =
+        course.description.length > 100
+          ? course.description.substring(0, 100) + "..."
+          : course.description;
+      courseCard.querySelector(".course-description").textContent = description;
+
+      // Set instructor information
+      if (course.instructor) {
+        courseCard.querySelector(".instructor-name").textContent =
+          course.instructor.name;
+        courseCard.querySelector(
+          ".instructor-name"
+        ).href = `/courses/instructor/${course.instructor.id}/`;
+      }
+
+      // Set course link
+      courseCard.querySelector(
+        ".course-link"
+      ).href = `/courses/${course.code}/`;
+
+      // Append to container
+      coursesContainer.appendChild(courseCard);
+    }
+  });
 </script>
 {% endblock %}
